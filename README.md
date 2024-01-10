@@ -29,6 +29,6 @@ given that we use **dependency injection** properly to have mock databases
 and widget tests.
 
 ## Things That Are Missing
-- [] Skeletonizer  - Skeleton UI
-- [] Add tests
-- [] Responsive UI
+- [ ] Skeletonizer  - Skeleton UI
+- [ ] Add tests
+- [ ] Responsive UI
