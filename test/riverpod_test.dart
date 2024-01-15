@@ -19,8 +19,7 @@ ProviderContainer createContainer({
 
   // When the test ends, dispose the container.
   addTearDown(container.dispose);
-
-  return container;
+return container;
 }
 
 void main() {
