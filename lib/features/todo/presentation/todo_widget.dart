@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:stack_demo/features/todo/data/todo_model.dart';
+import 'package:stack_demo/features/todo/domain/todo_model.dart';
 import 'package:stack_demo/features/todo/presentation/todo_controller.dart';
 
 class TodoWidget extends ConsumerWidget {

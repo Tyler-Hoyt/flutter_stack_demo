@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stack_demo/features/todo/domain/todo_repository.dart';
+import 'package:stack_demo/features/todo/data/todo_repository.dart';
 import 'package:stack_demo/features/todo/presentation/todo_controller.dart';
 import 'package:stack_demo/features/todo/presentation/todo_widget.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class TodoScreen extends StatelessWidget {
   const TodoScreen({super.key});
@@ -17,7 +18,7 @@ class TodoScreen extends StatelessWidget {
           (_, state) => state,
         );
         // Grab our list stream to build a list
-        final todoListAsync = ref.watch(fetchListProvider);
+        final todoListAsync = ref.watch(fetchListProvider(FirebaseFirestore.instance));
         return todoListAsync.when(
           data: (todoList) =>
           Scaffold(

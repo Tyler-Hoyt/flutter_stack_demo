@@ -1,6 +1,7 @@
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-import 'package:stack_demo/features/todo/data/todo_model.dart';
-import 'package:stack_demo/features/todo/domain/todo_repository.dart';
+import 'package:stack_demo/features/todo/domain/todo_model.dart';
+import 'package:stack_demo/features/todo/data/todo_repository.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 part 'todo_controller.g.dart';
 
@@ -12,6 +13,10 @@ part 'todo_controller.g.dart';
   work that we want. The controller is just the man in the middle.
   Think of this like a contract in model view presenter.
 */
+
+// I hardcoded the instance of Firebase here because this directly
+// depends on the UI using it. Will probably change in the future.
+
 @riverpod
 class TodoController extends _$TodoController {
   // This is ok to leave blank because it's a FutureOr
@@ -20,7 +25,9 @@ class TodoController extends _$TodoController {
   FutureOr<void> build() {}
 
   Future<void> toggleTodo(Todo todo) async {
-    final todoRepo = ref.read(todoRepositoryProvider);
+    final todoRepo = ref.read(
+      todoRepositoryProvider(FirebaseFirestore.instance)
+    );
 
     // This allows us to change our UI from the controller
     state = const AsyncLoading();
@@ -34,7 +41,9 @@ class TodoController extends _$TodoController {
   }
 
   Future<void> addTodo(String content) async {
-    final todoRepo = ref.read(todoRepositoryProvider);
+    final todoRepo = ref.read(
+      todoRepositoryProvider(FirebaseFirestore.instance)
+    );
 
     state = const AsyncLoading();
 
@@ -45,7 +54,9 @@ class TodoController extends _$TodoController {
   }
 
   Future<void> deleteTodo(Todo todo) async {
-    final todoRepo = ref.read(todoRepositoryProvider);
+    final todoRepo = ref.read(
+      todoRepositoryProvider(FirebaseFirestore.instance)
+    );
 
     state = const AsyncLoading();
 

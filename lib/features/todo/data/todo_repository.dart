@@ -1,12 +1,24 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:stack_demo/features/todo/data/todo_model.dart';
+import 'package:stack_demo/features/todo/domain/todo_model.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'todo_repository.g.dart';
 
 // Class for any interaction with the Firebase DB
 class TodoRepository {
-  var dbRef = FirebaseFirestore.instance.collection("Todo");
+  // This is the reference to our collection in the DB
+  //var dbRef = FirebaseFirestore.instance.collection("Todo");
+  late CollectionReference<Map<String, dynamic>> dbRef;
+
+  // Need to provide a client for our firestore instance this allows
+  // for dependency injection
+  TodoRepository({FirebaseFirestore? client}) {
+    if (client != null) {
+      // Set our dbRef to the client provided
+      dbRef = client.collection("Todo");
+    }
+  }
+
 
   // Streams in firebase allow for easy access to real-time updates
   Stream<List<Todo>> fetchList() {
@@ -69,12 +81,14 @@ class TodoRepository {
 }
 
 // These are our providers created for us by riverpod_generator
-@riverpod
-TodoRepository todoRepository(TodoRepositoryRef ref) {
-  return TodoRepository();
+@Riverpod(keepAlive: true)
+TodoRepository todoRepository(TodoRepositoryRef ref, FirebaseFirestore? client) {
+  return TodoRepository(client: client);
 }
 
 @riverpod
-Stream<List<Todo>> fetchList(FetchListRef ref) {
-  return ref.watch(todoRepositoryProvider).fetchList();
+Stream<List<Todo>> fetchList(FetchListRef ref, FirebaseFirestore? client) {
+  final repository = ref.watch(todoRepositoryProvider(client));
+  return repository.fetchList();
+  //return ref.watch(todoRepositoryProvider).fetchList();
 }
